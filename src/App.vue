@@ -48,29 +48,30 @@ export default {
           name: '用户管理',
           icon: 'el-icon-document',
           children: [
-            {name: '用户管理', path: '/user/publishedMissionLisa2'},
+            {name: '用户管理', path: '/user/userManage'},
+            {name: '后台用户管理', path: '/user/adminUserManage'},
           ]
         },
         {
           name: '小组管理',
           icon: 'el-icon-menu',
           children: [
-            {name: '小组管理', path: '/group/publishedMissionLisa2'},
+            {name: '小组管理', path: '/group/groupList'},
           ]
         },
         {
           name: '财务管理',
           icon: 'el-icon-goods',
           children: [
-            {name: '任务账单', path: '/finance/publishedMissionLisa2'},
-            {name: '用户管理', path: '/finance/publishedMissionLisb3'},
+            {name: '任务账单', path: '/finance/missionBillList'},
+            {name: '用户管理', path: '/finance/userBillList'},
           ]
         },
         {
           name: '公告管理',
           icon: 'el-icon-message',
           children: [
-            {name: '公告管理', path: '/xxx'}
+            {name: '公告管理', path: '/notice/noticeList'}
           ]
         }
       ]
