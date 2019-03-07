@@ -158,7 +158,7 @@ export default {
   }
 }
 .w100 {
-  width: 100%;
+  width: 100% !important;
 }
 .w300 {
   width: 300px !important;
