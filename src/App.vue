@@ -1,6 +1,6 @@
 <template lang="pug">
   .main-container(id='app')
-    .leftbar
+    .leftbar(:style='{transform: isLeftBarShow ? "translateX(0)" : "translateX(-100%)"}')
       .logo 玩固传媒
       .welcome
         img(src='./assets/logo.png' width='50')
@@ -18,8 +18,10 @@
               router-link(:to='child.path').child-nav
                 //- i.el-icon-tickets
                 span {{child.name}}
-    .right-content
+    .right-content(:style='{marginLeft: isLeftBarShow ? "220px" : "0px"}')
       .topbar
+        a.togglebtn(@click='isLeftBarShow = !isLeftBarShow' href='javascript:void(0)')
+          img(src='./assets/menu.png')
         el-button(type='danger').loginout 退出
       .page-content
         .page-breads
@@ -74,7 +76,8 @@ export default {
             {name: '公告管理', path: '/notice/noticeList'}
           ]
         }
-      ]
+      ],
+      isLeftBarShow: true
     }
   },
   watch: {
@@ -190,114 +193,128 @@ a {
   font-size: 14px;
   min-width: 1000px;
 }
-.logo {
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 45px;
-  background-color: #273e51;
-  text-align: center;
-}
-.welcome {
-  overflow: hidden;
-  padding: 20px;
-  border-bottom: 2px #293e50 solid;
-  img {
-    float: left;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 5px solid #2c3e50;
-    margin-right: 20px;
-  }
-  .userinfo {
-    margin-left: 70px;
-    text-align: left;
-    font-weight: bold;
-    .username {
-      margin-bottom: 5px;
-    }
-    .tip {
-      font-size: 12px;
-    }
-  }
-}
-.loginout {
-  position: absolute;
-  right: 10px;
-  top: 9px;
-}
-.navs {
-  a {
-      color: #fff;
-      text-decoration: none;
-  }
-  text-align: left;
-  .nav {
-    background-color: #33485e;
-    // margin: 2px 0;
-    border-bottom: 2px #2a3e50 solid;
-    border-left: 4px solid #1973c4;
-    .icon {
-      margin-right: 10px;
-    }
-    .el-icon-arrow-left,.el-icon-arrow-down {
-      float: right;
-      margin-top: 15px;
-      margin-right: 15px;
-      transition: .2s;
-    }
-    .el-icon-arrow-left.active {
-      transform: rotateZ(-90deg)
-    }
-    .parent-nav {
-      line-height: 45px;
-      padding-left: 20px;
-      display: block;
-      transition: .2s;
-    }
-    .parent-nav:hover {
-      background-color: #2b3e50;
-    }
-    .child-navs {
-      transition: .3s;
-      overflow: hidden;
-      background-color: #293e50;
-    }
-    .child-nav {
-      line-height: 37px;
-      padding-left: 45px;
-      display: block;
-      // transition: .2s;
-      font-size: 12px;
-    }
-    .child-nav:hover,.router-link-active {
-      color: #2a95f5;
-    }
-  }
-  .nav.active {
-    background-color: #2a3e50;
-  }
-}
 
 .leftbar {
   width: 220px;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: absolute;
   height: 100%;
+  float: left;
   background-color: #32475f;
   color: #fff;
+  transition: .3s;
+  .logo {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 45px;
+    background-color: #273e51;
+    text-align: center;
+  }
+  .welcome {
+    overflow: hidden;
+    padding: 20px;
+    border-bottom: 2px #293e50 solid;
+    img {
+      float: left;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 5px solid #2c3e50;
+      margin-right: 20px;
+    }
+    .userinfo {
+      margin-left: 70px;
+      text-align: left;
+      font-weight: bold;
+      .username {
+        margin-bottom: 5px;
+      }
+      .tip {
+        font-size: 12px;
+      }
+    }
+  }
+  .navs {
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+    text-align: left;
+    .nav {
+      background-color: #33485e;
+      // margin: 2px 0;
+      border-bottom: 2px #2a3e50 solid;
+      border-left: 4px solid #1973c4;
+      .icon {
+        margin-right: 10px;
+      }
+      .el-icon-arrow-left,.el-icon-arrow-down {
+        float: right;
+        margin-top: 15px;
+        margin-right: 15px;
+        transition: .2s;
+      }
+      .el-icon-arrow-left.active {
+        transform: rotateZ(-90deg)
+      }
+      .parent-nav {
+        line-height: 45px;
+        padding-left: 20px;
+        display: block;
+        transition: .2s;
+      }
+      .parent-nav:hover {
+        background-color: #2b3e50;
+      }
+      .child-navs {
+        transition: .3s;
+        overflow: hidden;
+        background-color: #293e50;
+      }
+      .child-nav {
+        line-height: 37px;
+        padding-left: 45px;
+        display: block;
+        // transition: .2s;
+        font-size: 12px;
+      }
+      .child-nav:hover,.router-link-active {
+        color: #2a95f5;
+      }
+    }
+    .nav.active {
+      background-color: #2a3e50;
+    }
+  }
 }
 .right-content {
-  margin-left: 230px;
-  padding: 60px 20px 0 0;
-  .topbar {
-    position: fixed;
-    top: 0;
-    left: 220px;
+  margin-left: 220px;
+  position: relative;
+  padding: 0 10px 0;
+  transition: .3s;
+  .togglebtn {
+    width: 50px;
     height: 50px;
-    right: 0;
+    padding: 12px;
+    display: block;
+    img {
+      width: 25px;
+    }
+    
+  }
+  .togglebtn:hover {
+    // background-color: #f5f5f5;
+  }
+  .topbar {
+    height: 50px;
     background-color: #fff;
+    position: relative;
+    margin-bottom: 10px;
+    // border-radius: 0 0 5px 5px;
+    .loginout {
+      position: absolute;
+      right: 10px;
+      top: 9px;
+    }
   }
   .page-content {
     background-color: #fff;
