@@ -188,6 +188,7 @@ a {
   // text-align: center;
   color: #2c3e50;
   font-size: 14px;
+  min-width: 1000px;
 }
 .logo {
   font-weight: bold;
