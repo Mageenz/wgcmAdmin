@@ -10,10 +10,19 @@ module.exports = {
   //       .end()
   // },
   configureWebpack: {
+    externals: {
+      jquery: 'jQuery',
+      vue: 'Vue'
+    },
     resolve: {
       extensions: ['.js', '.vue', '.json'],
       alias: {
         '@': path.resolve(__dirname, 'src'),
+      }
+    },
+    optimization: {
+      runtimeChunk: {
+        name: 'manifest'
       }
     }
   },
@@ -21,7 +30,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/dev': {
-        target: 'http://www.lianduhz.cn/',
+        target: 'http://39.98.197.90:8081/',
         changeOrigin: true,
         pathRewrite: {'^/dev' : ''}
       }

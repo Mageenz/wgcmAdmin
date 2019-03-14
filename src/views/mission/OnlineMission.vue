@@ -33,7 +33,7 @@
       el-form(label-width='100px' label-position='right')
         el-form-item 目前数量为12，单价为13元
         el-form-item(label='数量：' prop='')
-          el-input(placeholder='请输入数量' v-model='form.name' clearable)
+          el-input(placeholder='请输入数量' v-model='dForm.name' clearable)
       .d-foot(slot='footer')
         el-button(type='primary') 提交 
 </template>
@@ -42,11 +42,27 @@
 export default {
   data() {
     return {
-      form: {
+      form: {},
+      dForm: {
         name: ''
       },
       isDialogShow: false
     }
+  },
+  methods: {
+    getInfo() {
+      API.mission.taskDetail(this.form).then(res => {
+        if(res.data.code === '0') {
+          
+        }
+      })
+    }
+  },
+  mounted() {
+    const {taskId, taskType, taskAddUserType} = this.$route.query
+
+    this.form = {taskId, taskType, taskAddUserType}
+    this.getInfo()
   }
 }
 </script>
