@@ -23,16 +23,19 @@ export default {
     }
   },
   methods: {
-    login() {
+    async login() {
       const encrypt = new JSEncrypt();
       encrypt.setPublicKey(this.pubkey);
       const password = encrypt.encrypt(this.form.password);
       
-      const res = API.common.login({...this.form, password})
+      const res = await API.common.login({...this.form, password})
 
       if(res.data.code === 100) {
         localStorage.userInfo = JSON.stringify(res.data.data)
         this.$store.commit('updateUserInfo', res.data.data)
+        this.$router.push({
+          name: 'home'
+        })
       }
     }
   }

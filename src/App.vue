@@ -108,8 +108,12 @@ export default {
   .page-searchbar,.page-table,.page-table-info {
     margin-bottom: 15px;
   }
-  .el-form-item__label,.el-form-item__content,.el-checkbox__label {
+  .el-form-item__label,.el-form-item__content,.el-checkbox__label,.el-radio__label {
     font-size: 12px;
+  }
+  .el-radio__inner {
+    width: 12px;
+    height: 12px;
   }
   .page-table-info {
     width: 100%;
@@ -149,6 +153,9 @@ export default {
 }
 .mr15 {
   margin-right: 15px;
+}
+.mb30 {
+  margin-bottom: 30px !important;
 }
 body {
   background-color: #eee;

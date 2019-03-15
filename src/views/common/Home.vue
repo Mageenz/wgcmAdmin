@@ -52,8 +52,9 @@ export default {
   .togglebtn {
     width: 50px;
     height: 50px;
-    padding: 12px;
     display: block;
+    padding-top: 15px;
+    padding-left: 12px;
     img {
       width: 25px;
     }

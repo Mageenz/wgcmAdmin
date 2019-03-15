@@ -20,7 +20,7 @@ let requestWithoutLoading = axios.create({
 requestWithLoading.interceptors.request.use(function (config) {
   let formData = new FormData()
   for(let key in config.data) {
-    if(config.data.hasOwnProperty(key)) {
+    if(config.data.hasOwnProperty(key) && config.data[key] !== undefined) {
       formData.append(key, config.data[key])
     }
   }
@@ -51,7 +51,7 @@ requestWithLoading.interceptors.response.use(function (response) {
 requestWithoutLoading.interceptors.request.use(function (config) {
   let formData = new FormData()
   for(let key in config.data) {
-    if(config.data.hasOwnProperty(key)) {
+    if(config.data.hasOwnProperty(key) && config.data[key] !== undefined) {
       formData.append(key, config.data[key])
     }
   }
@@ -82,5 +82,11 @@ window.API = {
   mission: {
     taskView: data => requestWithLoading.post('/AllTask/taskView', data),
     taskDetail: data => requestWithLoading.post('/AllTask/taskDetail', data),
+    addQuantity: data => requestWithLoading.post('/Task/addQuantity', data),
+    updateReleaseStatus: data => requestWithLoading.post('/AllTask/updateReleaseStatus', data),
+    receiveTaskView: data => requestWithLoading.post('/AllTask/receiveTaskView', data),
+    taskCheck: data => requestWithLoading.post('/AllTask/taskCheck', data),
+    checkReleaseTask: data => requestWithLoading.post('/AllTask/checkReleaseTask', data),
+    updateReceiveStatus: data => requestWithLoading.post('/AllTask/updateReceiveStatus', data),
   }
 }

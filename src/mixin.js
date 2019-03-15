@@ -7,8 +7,8 @@ export default {
       })
     },
     handlePageChange(page) {
-      this.form.currentPage = page
-      this.appendSearchParamsToRoute({currentPage: page})
+      this.form.page = page
+      this.appendSearchParamsToRoute({page})
       this.getList()
     }
   },

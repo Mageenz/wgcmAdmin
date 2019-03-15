@@ -8,16 +8,16 @@
         el-input(placeholder='请输入关键词' v-model='form.taskId' clearable).w100
       el-col(:span='6' style='text-align:left')
         el-button(type='primary' icon='el-icon-search' @click='search') 搜索
-    el-table(:data='tableList' border stripe).page-table
+    el-table(:data='list' border stripe).page-table
       el-table-column(type='index')
       el-table-column(label='任务编号')
         template(slot-scope='{row}')
-          router-link(:to='{name: "onlineMission", query: {taskId: row.tid, taskType: "ReleaseTask", taskAddUserType: row.taddUserType}}') {{row.tid}}
+          router-link(:to='{name: "onlineMission", query: {operateType: "online", releaseTaskId: $route.query.releaseTaskId, taskId: row.tid, taskType: "ReceiveTask", taskAddUserType: row.taddUserType}}') {{row.tid}}
       el-table-column(label='平台' prop='platformName')
       el-table-column(label='方向' prop='tdirection')
       el-table-column(label='数量')
         template(slot-scope='{row}')
-          router-link(:to='{name: "acceptMissionList"}') {{row.trequiredquan}}/{{row.tleftquan}}
+          router-link(:to='{name: "acceptMissionList", query: {releaseTaskId: row.tid}}') {{row.trequiredquan}}/{{row.tleftquan}}
     el-pagination.page-pagination(background :total='pagination.totalCount' :page-size='pagination.pageSize' :current-page='form.page' @current-change='handlePageChange' layout='prev, pager, next, total, jumper')
 </template>
 
@@ -31,7 +31,7 @@ export default {
     return {
       missionStatus,
       form: {
-        taskStatus: '0',
+        taskStatus: '1',
         taskId: '',
         page: 1
       },
@@ -39,14 +39,14 @@ export default {
         totalCount: 1,
         pageSize: 10
       },
-      tableList: []
+      list: []
     }
   },
   methods: {
     getList() {
       const {taskStatus, taskId, page} = this.$route.query
 
-      this.form.taskStatus = taskStatus || '0'
+      this.form.taskStatus = taskStatus || '1'
       this.form.taskId = taskId || ''
       this.form.page = +page || 1
       
@@ -54,7 +54,7 @@ export default {
 
       API.mission.taskView(params).then(res => {
         if(res.data.code === 100) {
-          this.tableList = res.data.data.list
+          this.list = res.data.data.list
         }
       })
     },
