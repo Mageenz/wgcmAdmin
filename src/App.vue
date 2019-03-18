@@ -100,8 +100,9 @@ export default {
       background-color: #eee;
       padding: 10px;
       border-radius: 5px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
   }
+  
   .page-top-tip {
     margin-bottom: 15px;
   }
@@ -141,6 +142,9 @@ export default {
   .page-foot,.page-pagination {
     text-align: center;
   }
+}
+.upload-tip {
+  color: #ccc;
 }
 .w100 {
   width: 100% !important;

@@ -3,12 +3,14 @@ import router from './router'
 import store from './store'
 import { Message } from 'element-ui';
 
+window.ENV = process.env.NODE_ENV === 'production' ? '' : '/dev'
+
 let requestWithLoading = axios.create({
   headers: {
     'content-type': 'multipart/form-data'
   },
   timeout: 5000,
-  baseURL: process.env.NODE_ENV === 'production' ? '' : '/dev'
+  baseURL: ENV
 })
 let requestWithoutLoading = axios.create({
   headers: {
@@ -41,7 +43,7 @@ requestWithLoading.interceptors.response.use(function (response) {
   Message.error({
     message: data.message || '系统繁忙'
   })
-  if (status === 401) {
+  if (status === 500) {
     router.replace({
       name: 'login'
     })
@@ -67,7 +69,7 @@ requestWithoutLoading.interceptors.response.use(function (response) {
   const data = JSON.parse(error.request.response)
   const status = error.request.status
 
-  if (status === 401) {
+  if (status === 500) {
     router.replace({
       name: 'login'
     })
@@ -79,6 +81,9 @@ window.API = {
   common: {
     login: data => requestWithoutLoading.post('/Admin/doLogin', data)
   },
+  platform: {
+    searchAll: data => requestWithoutLoading.post('/Platform/searchAll', data),
+  },
   mission: {
     taskView: data => requestWithLoading.post('/AllTask/taskView', data),
     taskDetail: data => requestWithLoading.post('/AllTask/taskDetail', data),
@@ -88,5 +93,18 @@ window.API = {
     taskCheck: data => requestWithLoading.post('/AllTask/taskCheck', data),
     checkReleaseTask: data => requestWithLoading.post('/AllTask/checkReleaseTask', data),
     updateReceiveStatus: data => requestWithLoading.post('/AllTask/updateReceiveStatus', data),
+    getTaskType: data => requestWithoutLoading.post('/Task/getTaskType', data),
+    getTaskTypeDetail: data => requestWithoutLoading.post('/Task/getTaskTypeDetail', data),
+    doPublish: data => requestWithLoading.post('/Task/doPublish', data),
+    getPlatformList: data => requestWithLoading.post('/Platform/searchAll', data),
+    addPlatform: data => requestWithoutLoading.post('/Platform/add', data),
+    delPlatform: data => requestWithoutLoading.post('/Platform/del', data),
+    editPlatform: data => requestWithoutLoading.post('/Platform/changeName', data),
+    getPCList: data => requestWithLoading.post('/TaskType/searchAll', data),
+    addPC: data => requestWithoutLoading.post('/TaskType/add', data),
+    delPC: data => requestWithoutLoading.post('/TaskType/del', data),
+    getAllSecondTaskType: data => requestWithLoading.post('/TaskType/getAllSecondTaskType', data),
+    addSecondTaskType: data => requestWithLoading.post('/TaskType/addSecondTaskType', data),
+    delSecondTaskType: data => requestWithLoading.post('/TaskType/delSecondTaskType', data),
   }
 }

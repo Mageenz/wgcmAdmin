@@ -7,7 +7,9 @@ import MissionDetail from '@/views/mission/MissionDetail'
 import MissionCheckList from '@/views/mission/MissionCheckList'
 import AcceptMissionList from '@/views/mission/AcceptMissionList'
 import PublishMission from '@/views/mission/PublishMission'
+import PlatformList from '@/views/mission/PlatformList'
 import CategoryList from '@/views/mission/CategoryList'
+import ChildCategoryList from '@/views/mission/ChildCategoryList'
 import UserManage from '@/views/user/UserManage'
 import AdminUserManage from '@/views/user/AdminUserManage'
 import GroupList from '@/views/group/GroupList'
@@ -26,7 +28,9 @@ export default new Router({
       {name: 'acceptMissionList', path: '/mission/publishedMissionList/acceptMissionList', component: AcceptMissionList, meta: {breads: ['已发布任务', '接单任务浏览']}},
       {name: 'missionCheckList', path: '/mission/missionCheckList', component: MissionCheckList, meta: {breads: ['任务审核']}},
       {name: 'publishMission', path: '/mission/publishMission', component: PublishMission, meta: {breads: ['发布任务']}},
-      {name: 'categoryList', path: '/mission/categoryList', component: CategoryList, meta: {breads: ['平台及任务类型管理']}},
+      {name: 'platformList', path: '/mission/platformList', component: PlatformList, meta: {breads: ['平台及任务类型管理']}},
+      {name: 'categoryList', path: '/mission/platformList/categoryList', component: CategoryList, meta: {breads: ['平台及任务类型管理', '一级类型']}},
+      {name: 'childCategoryList', path: '/mission/platformList/childCategoryList', component: ChildCategoryList, meta: {breads: ['平台及任务类型管理', '一级类型', '二级类型']}},
       {name: 'userManage', path: '/user/userManage', component: UserManage, meta: {breads: ['用户管理']}},
       {name: 'adminUserManage', path: '/user/adminUserManage', component: AdminUserManage, meta: {breads: ['后台用户管理']}},
       {name: 'groupList', path: '/group/groupList', component: GroupList, meta: {breads: ['小组管理']}},

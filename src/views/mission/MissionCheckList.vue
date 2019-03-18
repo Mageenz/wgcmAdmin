@@ -42,7 +42,7 @@ export default {
       },
       pagination: {
         totalCount: 1,
-        pageSize: 10
+        pageSize: 20
       },
       items: [
         {value: 'ReceiveTask', name: '驳回任务'},
@@ -71,6 +71,7 @@ export default {
 
       if(res.data.code === 100) {
         this.list = res.data.data.list
+        this.pagination.totalCount = res.data.data.total
       }
     },
     search() {

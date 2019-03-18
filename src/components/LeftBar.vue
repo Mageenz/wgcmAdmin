@@ -2,9 +2,9 @@
   .leftbar(:style='{transform: isLeftBarShow ? "translateX(0)" : "translateX(-100%)"}')
     .logo 玩固传媒
     .welcome
-      img(src='../assets/logo.png' width='50')
+      img(:src='`${ENV}${userInfo.admin.aheadphoto}`' width='50')
       .userinfo
-        .username magee
+        .username {{userInfo.admin.aname}}
         .tip 欢迎回来
     ul.navs
       li.nav(v-for='(parent, index) in navs' :class='{active: activeIndex === index}')
@@ -23,6 +23,7 @@
 export default {
   data() {
     return {
+      ENV,
       activeIndex: 0,
       navs: [
         {
@@ -32,7 +33,7 @@ export default {
             {name: '已发布任务', path: '/mission/publishedMissionList'},
             {name: '任务审核', path: '/mission/missionCheckList'},
             {name: '发布任务', path: '/mission/publishMission'},
-            {name: '平台及任务类型', path: '/mission/categoryList'},
+            {name: '平台及任务类型', path: '/mission/platformList'},
           ]
         },
         {

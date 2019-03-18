@@ -1,23 +1,22 @@
 <template lang='pug'>
   .page-container
-    .page-top-tip 平台名称：{{$route.query.pname}}
+    .page-top-tip 上级类型名称：{{$route.query.tname}}
     .page-operatebar
-      el-button(type='primary' @click='isDialogShow = true') 添加任务类型
+      el-button(type='primary' @click='isDialogShow = true') 添加子任务类型
     el-table(:data='list' border stripe)
       el-table-column(type='index')
-      el-table-column(label='任务类型名称	' prop='tname')
-      el-table-column(label='单价（元）' prop='tunit')
+      el-table-column(label='子任务类型名称' prop='dname')
+      el-table-column(label='单价（元）' prop='unitPrice')
       el-table-column(label='兼职单价（元）' prop='receiverUnit')
       el-table-column(label='操作' prop='')
         template(slot-scope='{row}')
-          el-button(type='text' @click='$router.push({name: "childCategoryList", query: {fatherTaskType: row.tid, tname: row.tname}})') 查看子类型
           el-button(type='text' @click='delPlatform(row)') 删除
     el-dialog(:visible.sync='isDialogShow' title='新建平台' width='50%')
       el-form(label-width='120px' label-position='right' :model='form' :rules='rules' ref='form')
         el-form-item(label='名称:' prop='taskTypeName')
           el-input(placeholder='请输入名称' v-model='form.taskTypeName' clearable).w300
-        el-form-item(label='单价' prop='taskTypeUnit')
-          el-input(placeholder='请输入单价' v-model='form.taskTypeUnit' clearable).w300
+        el-form-item(label='单价' prop='unitPrice')
+          el-input(placeholder='请输入单价' v-model='form.unitPrice' clearable).w300
         el-form-item(label='兼职单价' prop='receiverUnit')
           el-input(placeholder='请输入兼职单价' v-model='form.receiverUnit' clearable).w300
       .p-foot(slot='footer')
@@ -31,30 +30,23 @@ export default {
       ENV,
       form: {
         taskTypeName: '',
-        taskTypeUnit: '',
+        unitPrice: '',
         receiverUnit: '',
-        taskTypePlatform: ''
+        fatherTaskType: ''
       },
       rules: {
         taskTypeName: [
           {required: true, message: '请输入平台名称'}
         ],
-        taskTypeUnit: [
+        unitPrice: [
           {required: true, message: '请输入单价'}
         ],
         receiverUnit: [
           {required: true, message: '请输入兼职单价'}
         ]
       },
-      fileList: [],
       isDialogShow: false,
-      isDialogShow1: false,
-      form1: {
-        platformName: '',
-        platformId: ''
-      },
       list: [],
-      action: `${ENV}/Task/uploadMedia`,
     }
   },
   methods: {
@@ -64,8 +56,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        const res = await API.mission.delPC({
-          taskTypeId: row.tid
+        const res = await API.mission.delSecondTaskType({
+          fatherTaskType: this.form.fatherTaskType,
+          taskTypeId: row.did
         })
 
         if(res.data.code === 100) {
@@ -73,34 +66,34 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
-          this.getPCList()
+          this.getAllSecondTaskType()
         }
       })
     },
     submit() {
       this.$refs.form.validate(async valid => {
         if(valid) {
-          const res = await API.mission.addPC(this.form)
+          const res = await API.mission.addSecondTaskType(this.form)
 
           if(res.data.code === 100) {
             this.$message.success('添加成功')
             this.isDialogShow = false
             this.form = {
               taskTypeName: '',
-              taskTypeUnit: '',
+              unitPrice: '',
               receiverUnit: '',
-              taskTypePlatform: this.$route.query.platformId
+              fatherTaskType: this.$route.query.fatherTaskType
             }
-            this.getPCList()
+            this.getAllSecondTaskType()
           }
         }
       })
     },
-    async getPCList() {
-      this.form.taskTypePlatform = this.$route.query.platformId
+    async getAllSecondTaskType() {
+      this.form.fatherTaskType = this.$route.query.fatherTaskType
 
-      const res = await API.mission.getPCList({
-        platformId: this.form.taskTypePlatform
+      const res = await API.mission.getAllSecondTaskType({
+        fatherTaskType: this.form.fatherTaskType
       })
 
       if(res.data.code === 100) {
@@ -109,7 +102,7 @@ export default {
     }
   },
   mounted() {
-    this.getPCList()
+    this.getAllSecondTaskType()
   }
 }
 </script>

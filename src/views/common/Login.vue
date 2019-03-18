@@ -4,7 +4,7 @@
       el-form-item(label='用户名：' prop='')
         el-input(placeholder='请输入用户名' v-model='form.userName' clearable).w300
       el-form-item(label='密码：' prop='')
-        el-input(placeholder='请输入密码' v-model='form.password' clearable).w300
+        el-input(placeholder='请输入密码' type='password' v-model='form.password' clearable).w300
       el-form-item(label='' prop='')
         el-button(type='primary' @click='login') 登录 
 </template>

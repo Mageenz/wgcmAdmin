@@ -53,7 +53,7 @@ export default {
     width: 50px;
     height: 50px;
     display: block;
-    padding-top: 15px;
+    padding-top: 12px;
     padding-left: 12px;
     img {
       width: 25px;
