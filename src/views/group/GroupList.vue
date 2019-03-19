@@ -71,6 +71,7 @@ export default {
             this.$message.success('操作成功')
             this.isDialogShow = false
             this.form.groupName = ''
+            this.$refs.form.clearValidate()
             this.groupManagement()
           }
         }

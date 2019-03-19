@@ -114,12 +114,7 @@ export default {
           if(res.data.code === 100) {
             this.$message.success('添加成功')
             this.isDialogShow = false
-            this.form = {
-              platformName: '',
-              file: null,
-              taskAccountLimit: '',
-              taskAccountType: '1'
-            }
+            this.$refs.form.resetFields()
             this.getPlatformList()
           }
         }

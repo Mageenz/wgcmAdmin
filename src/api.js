@@ -33,6 +33,11 @@ requestWithLoading.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 requestWithLoading.interceptors.response.use(function (response) {
+  if(response.data.code === 401) {
+    router.replace({
+      name: 'login'
+    })
+  }
   store.commit('updateLoadingStatus', false)
   return response;
 }, function (error) {
@@ -43,11 +48,6 @@ requestWithLoading.interceptors.response.use(function (response) {
   Message.error({
     message: data.message || '系统繁忙'
   })
-  if (status === 401) {
-    router.replace({
-      name: 'login'
-    })
-  }
   return Promise.reject(error);
 });
 requestWithoutLoading.interceptors.request.use(function (config) {
@@ -64,6 +64,11 @@ requestWithoutLoading.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 requestWithoutLoading.interceptors.response.use(function (response) {
+  if(response.data.code === 401) {
+    router.replace({
+      name: 'login'
+    })
+  }
   return response;
 }, function (error) {
   const data = JSON.parse(error.request.response)
@@ -123,5 +128,16 @@ window.API = {
     getFinancialBillByDate: data => requestWithLoading.post('/Bill/getFinancialBillByDate', data),
     getFinancialBillByDateRange: data => requestWithLoading.post('/Bill/getFinancialBillByDateRange', data),
     updateRemark: data => requestWithLoading.post('/Bill/updateRemark', data),
+  },
+  user: {
+    getUserList: data => requestWithLoading.post('/User/getUserList', data),
+    userDetail: data => requestWithLoading.post('/User/userDetail', data),
+    adminManagement: data => requestWithLoading.post('/Admin/adminManagement', data),
+    deleteAdmin: data => requestWithLoading.post('/Admin/deleteAdmin', data),
+    addAdmin: data => requestWithLoading.post('/Admin/addAdmin', data),
+  },
+  notice: {
+    searchAll: data => requestWithLoading.post('/Notice/searchAll', data),
+    add: data => requestWithLoading.post('/Notice/add', data),
   }
 }

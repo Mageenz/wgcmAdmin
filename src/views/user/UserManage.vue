@@ -2,22 +2,19 @@
   .page-container
     el-row(:gutter='20').page-searchbar
       el-col(:span='6')
-        el-select(placeholder='请选择' v-model='form.name' clearable).w100
+        el-select(placeholder='请选择' v-model='form.userType' clearable).w100
           el-option(:value='key' :label='item' v-for='(item, key) in userType')
       el-col(:span='6')
-        el-input(placeholder='请输入关键词' v-model='form.name1' clearable).w100
+        el-input(placeholder='请输入用户名' v-model='form.name' clearable).w100
       el-col(:span='6' style='text-align:left')
         el-button(type='primary' icon='el-icon-search' @click='search') 搜索
-    el-table(:data='[{}]' border stripe).page-table
+    el-table(:data='list' border stripe).page-table
       el-table-column(type='index')
       el-table-column(label='用户编号')
         template(slot-scope='{row}')
-          router-link(:to='{name: "onlineMission"}') 1234
-      el-table-column(label='用户名' prop='')
-      el-table-column(label='操作' prop='')
-        template(slot-scope='{row}')
-          router-link(:to='{name: "acceptMissionList"}') 0/13
-    el-pagination.page-pagination(background :total='pagination.totalCount' :page-size='pagination.pageSize' :current-page='form.currentPage' @current-change='handlePageChange' layout='prev, pager, next, total, jumper')
+          router-link(:to='{name: "userDetail", query: {id: row.cid, userType: form.userType}}') {{row.cid}}
+      el-table-column(label='用户名' prop='cname')
+    el-pagination.page-pagination(background :total='pagination.totalCount' :page-size='pagination.pageSize' :current-page='form.page' @current-change='handlePageChange' layout='prev, pager, next, total, jumper')
 </template>
 
 <script>
@@ -30,28 +27,32 @@ export default {
     return {
       userType,
       form: {
-        name: 'Receiver',
-        name1: '',
-        currentPage: 1
+        userType: 'Receiver',
+        name: '',
+        page: 1
       },
       pagination: {
         totalCount: 1,
         pageSize: 10
-      }
+      },
+      list: []
     }
   },
   methods: {
-    getList() {
-      const {name, name1, currentPage} = this.$route.query
+    async getList() {
+      const {userType, name, page} = this.$route.query
 
-      this.form.name = name || 'Receiver'
-      this.form.name1 = name1 || ''
-      this.form.currentPage = +currentPage || 1
+      this.form.userType = userType || 'Receiver'
+      this.form.name = name || ''
+      this.form.page = +page || 1
       
       const params = {...this.form, pageSize: this.pagination.pageSize}
+      const res = await API.user.getUserList(params)
 
-      // 请求接口
-      console.log('params', params)
+      if(res.data.code === 100) {
+        this.list = res.data.data.list
+        this.pagination.totalCount = res.data.data.total
+      }
     },
     search() {
       this.appendSearchParamsToRoute({...this.form})
