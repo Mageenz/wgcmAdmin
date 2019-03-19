@@ -1,4 +1,4 @@
-export const formatTime = (v) => {
+export function formatTime(v){
   if(!v) {
     return ''
   }

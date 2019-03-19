@@ -43,7 +43,7 @@ requestWithLoading.interceptors.response.use(function (response) {
   Message.error({
     message: data.message || '系统繁忙'
   })
-  if (status === 500) {
+  if (status === 401) {
     router.replace({
       name: 'login'
     })
@@ -69,7 +69,7 @@ requestWithoutLoading.interceptors.response.use(function (response) {
   const data = JSON.parse(error.request.response)
   const status = error.request.status
 
-  if (status === 500) {
+  if (status === 401) {
     router.replace({
       name: 'login'
     })
@@ -106,5 +106,22 @@ window.API = {
     getAllSecondTaskType: data => requestWithLoading.post('/TaskType/getAllSecondTaskType', data),
     addSecondTaskType: data => requestWithLoading.post('/TaskType/addSecondTaskType', data),
     delSecondTaskType: data => requestWithLoading.post('/TaskType/delSecondTaskType', data),
+  },
+  group: {
+    groupManagement: data => requestWithLoading.post('/Group/groupManagement', data),
+    deleteGroup: data => requestWithLoading.post('/Group/deleteGroup', data),
+    buildGroup: data => requestWithLoading.post('/Group/buildGroup', data),
+    changeGroupName: data => requestWithLoading.post('/Group/changeGroupName', data),
+    groupDetail: data => requestWithLoading.post('/Group/groupDetail', data),
+    addGroupMember: data => requestWithLoading.post('/Group/addGroupMember', data),
+    changeGroup: data => requestWithLoading.post('/Group/changeGroup', data),
+  },
+  bill: {
+    getBillByDate: data => requestWithLoading.post('/Bill/getBillByDate', data),
+    getBillByDateRange: data => requestWithLoading.post('/Bill/getBillByDateRange', data),
+    changeBillStatus: data => requestWithLoading.post('/Bill/changeBillStatus', data),
+    getFinancialBillByDate: data => requestWithLoading.post('/Bill/getFinancialBillByDate', data),
+    getFinancialBillByDateRange: data => requestWithLoading.post('/Bill/getFinancialBillByDateRange', data),
+    updateRemark: data => requestWithLoading.post('/Bill/updateRemark', data),
   }
 }

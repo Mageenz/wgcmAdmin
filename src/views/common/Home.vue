@@ -10,6 +10,7 @@
         .page-breads
           el-breadcrumb(separator='/')
             el-breadcrumb-item(v-for='item in $route.meta.breads') {{item}}
+          //- el-button(@click='$router.go(-1)').back-btn 返回
         .router-container(v-loading='isLoading')
           router-view.router
 </template>
@@ -49,6 +50,9 @@ export default {
   position: relative;
   padding: 0 10px 0;
   transition: .3s;
+  .back-btn {
+    float: right;
+  }
   .togglebtn {
     width: 50px;
     height: 50px;

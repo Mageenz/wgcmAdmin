@@ -65,7 +65,12 @@ export const missionType = {
   109: '日常养号直发'
 }
 
+// 账单类型:clientRecharge 客户充值/clientPay 客户支出/clientRefund 客户退款/receiverSalary 兼职工资/receiverIncome 兼职收益
 
-export const zpzType = {
-
+export const billType = {
+  'clientRecharge': '客户充值',
+  'clientPay': '客户支出',
+  'clientRefund': '客户退款',
+  'receiverSalary': '兼职工资',
+  'receiverIncome': '兼职收益',
 }

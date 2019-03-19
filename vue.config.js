@@ -1,17 +1,11 @@
 const path = require('path')
 
 module.exports = {
-  // chainWebpack: config => {
-  //   config.module
-  //     .rule('pug')
-  //     .test(/\.pug$/)
-  //     .use('pug-plain-loader')
-  //       .loader('pug-plain-loader')
-  //       .end()
-  // },
+  publicPath: process.env.NODE_ENV === 'production' ? '/admin/' : '/',
+  outputDir: 'admin',
   configureWebpack: {
     externals: {
-      jquery: 'jQuery',
+      // jquery: 'jQuery',
       vue: 'Vue'
     },
     resolve: {
@@ -26,7 +20,6 @@ module.exports = {
       }
     }
   },
-  // baseUrl: process.env.NODE_ENV === 'production' ? '/adminadmin/' : '/',
   devServer: {
     proxy: {
       '/dev': {

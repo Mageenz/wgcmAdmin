@@ -8,7 +8,10 @@ export default {
     },
     handlePageChange(page) {
       this.form.page = page
-      this.appendSearchParamsToRoute({page})
+      this.appendSearchParamsToRoute({
+        ...this.$route.query,
+        page
+      })
       this.getList()
     }
   },

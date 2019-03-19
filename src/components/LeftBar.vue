@@ -56,7 +56,7 @@ export default {
           icon: 'el-icon-goods',
           children: [
             {name: '任务账单', path: '/finance/missionBillList'},
-            {name: '用户管理', path: '/finance/userBillList'},
+            {name: '用户账单', path: '/finance/userBillList'},
           ]
         },
         {
