@@ -10,7 +10,8 @@ import PublishMission from '@/views/mission/PublishMission'
 import PlatformList from '@/views/mission/PlatformList'
 import CategoryList from '@/views/mission/CategoryList'
 import ChildCategoryList from '@/views/mission/ChildCategoryList'
-import UserManage from '@/views/user/UserManage'
+import CUserManage from '@/views/user/CUserManage'
+import RUserManage from '@/views/user/RUserManage'
 import UserDetail from '@/views/user/UserDetail'
 import AdminUserManage from '@/views/user/AdminUserManage'
 import GroupList from '@/views/group/GroupList'
@@ -34,7 +35,8 @@ export default new Router({
       {name: 'platformList', path: '/mission/platformList', component: PlatformList, meta: {breads: ['平台及任务类型管理']}},
       {name: 'categoryList', path: '/mission/platformList/categoryList', component: CategoryList, meta: {breads: ['平台及任务类型管理', '一级类型']}},
       {name: 'childCategoryList', path: '/mission/platformList/childCategoryList', component: ChildCategoryList, meta: {breads: ['平台及任务类型管理', '一级类型', '二级类型']}},
-      {name: 'userManage', path: '/user/userManage', component: UserManage, meta: {breads: ['用户管理']}},
+      {name: 'rUserManage', path: '/user/rUserManage', component: RUserManage, meta: {breads: ['用户管理', '兼职管理']}},
+      {name: 'cUserManage', path: '/user/cUserManage', component: CUserManage, meta: {breads: ['用户管理', '客户管理']}},
       {name: 'userDetail', path: '/user/userDetail', component: UserDetail, meta: {breads: ['用户管理', '用户详情']}},
       {name: 'adminUserManage', path: '/user/adminUserManage', component: AdminUserManage, meta: {breads: ['后台用户管理']}},
       {name: 'groupList', path: '/group/groupList', component: GroupList, meta: {breads: ['小组管理']}},

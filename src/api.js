@@ -111,6 +111,7 @@ window.API = {
     getAllSecondTaskType: data => requestWithLoading.post('/TaskType/getAllSecondTaskType', data),
     addSecondTaskType: data => requestWithLoading.post('/TaskType/addSecondTaskType', data),
     delSecondTaskType: data => requestWithLoading.post('/TaskType/delSecondTaskType', data),
+    foundation: data => requestWithLoading.post('/Task/foundation', data),
   },
   group: {
     groupManagement: data => requestWithLoading.post('/Group/groupManagement', data),

@@ -92,12 +92,9 @@ a {
 }
 body {
   min-width: 1000px;
-}
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: Helvetica Neue,Tahoma,PingFang SC,Hiragino Sans GB,Microsoft YaHei,STHeitiSC,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
   color: #2c3e50;
   font-size: 14px;
 }

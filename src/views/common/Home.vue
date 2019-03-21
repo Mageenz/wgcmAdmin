@@ -5,7 +5,7 @@
       .topbar
         a.togglebtn(@click='isLeftBarShow = !isLeftBarShow' href='javascript:void(0)')
           img(src='../../assets/menu.png')
-        el-button(type='danger' @click='loginOut').loginout 退出
+        el-button(type='danger' size='mini' @click='loginOut').loginout 登出
       .page-content
         .page-breads
           el-breadcrumb(separator='/')
@@ -50,38 +50,38 @@ export default {
   position: relative;
   padding: 0 10px 0;
   transition: .3s;
-  .back-btn {
-    float: right;
-  }
-  .togglebtn {
-    width: 50px;
-    height: 50px;
-    display: block;
-    padding-top: 12px;
-    padding-left: 12px;
-    img {
-      width: 25px;
-    }
-  }
-  .togglebtn:hover {
-    background-color: #f5f5f5;
-  }
   .topbar {
-    height: 50px;
+    height: 40px;
     background-color: #fff;
     position: relative;
-    margin-bottom: 10px;
-    // border-radius: 0 0 5px 5px;
+    margin-bottom: 5px;
     .loginout {
       position: absolute;
-      right: 10px;
-      top: 9px;
+      right: 5px;
+      top: 6px;
+    }
+    .back-btn {
+      float: right;
+    }
+    .togglebtn {
+      width: 50px;
+      height: 40px;
+      display: block;
+      padding-top: 8px;
+      padding-left: 12px;
+      img {
+        width: 25px;
+      }
+    }
+    .togglebtn:hover {
+      background-color: #f5f5f5;
     }
   }
   .page-content {
     background-color: #fff;
     border-radius: 5px;
     padding: 15px;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.08);
   }
   .page-breads {
     border-bottom: 1px #eee solid;

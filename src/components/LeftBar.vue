@@ -8,15 +8,19 @@
         .tip 欢迎回来
     ul.navs
       li.nav(v-for='(parent, index) in navs' :class='{active: activeIndex === index}')
-        a.parent-nav(@click='openChildNavs(index)' href='javascript:void(0)')
-          i(:class='parent.icon').icon
-          span {{parent.name}}
-          i.el-icon-arrow-left(:class='{active: activeIndex === index}')
-        ul.child-navs(:style='{height: activeIndex === index ? `${parent.children.length * 37}px` : 0}')
-          li(v-for='child in parent.children')
-            router-link(:to='child.path').child-nav
-              //- i.el-icon-tickets
-              span {{child.name}}
+        template(v-if='!parent.path')
+          a.parent-nav(@click='openChildNavs(index)' href='javascript:void(0)')
+            i(:class='parent.icon').icon
+            span {{parent.name}}
+            i.el-icon-arrow-left(:class='{active: activeIndex === index}')
+          ul.child-navs(:style='{height: activeIndex === index ? `${parent.children.length * 37}px` : 0}')
+            li(v-for='child in parent.children')
+              router-link(:to='child.path').child-nav
+                span {{child.name}}
+        template(v-else)
+          router-link(:to='parent.path' @click='openChildNavs(index)').parent-nav-spec
+            i(:class='parent.icon').icon
+            span {{parent.name}}
 </template>
 
 <script>
@@ -40,13 +44,15 @@ export default {
           name: '用户管理',
           icon: 'el-icon-document',
           children: [
-            {name: '用户管理', path: '/user/userManage'},
+            {name: '兼职管理', path: '/user/rUserManage'},
+            {name: '客户管理', path: '/user/cUserManage'},
             {name: '后台用户管理', path: '/user/adminUserManage'},
           ]
         },
         {
           name: '小组管理',
           icon: 'el-icon-menu',
+          path: '/group/groupList',
           children: [
             {name: '小组管理', path: '/group/groupList'},
           ]
@@ -164,6 +170,9 @@ export default {
       .icon {
         margin-right: 10px;
       }
+      .parent-nav-spec.router-link-active,.parent-nav-spec:hover {
+        background-color: #2a3e50;
+      }
       .el-icon-arrow-left,.el-icon-arrow-down {
         float: right;
         margin-top: 15px;
@@ -173,7 +182,7 @@ export default {
       .el-icon-arrow-left.active {
         transform: rotateZ(-90deg)
       }
-      .parent-nav {
+      .parent-nav,.parent-nav-spec {
         line-height: 45px;
         padding-left: 20px;
         display: block;

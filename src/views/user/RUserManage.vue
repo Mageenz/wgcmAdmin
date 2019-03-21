@@ -1,7 +1,7 @@
 <template lang="pug">
   .page-container
     el-row(:gutter='20').page-searchbar
-      el-col(:span='6')
+      //- el-col(:span='6')
         el-select(placeholder='请选择' v-model='form.userType' clearable).w100
           el-option(:value='key' :label='item' v-for='(item, key) in userType')
       el-col(:span='6')

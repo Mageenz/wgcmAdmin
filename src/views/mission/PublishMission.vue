@@ -1,6 +1,6 @@
 <template lang='pug'>
   .page-container
-    .page-top-tip 朋友圈直发订单：产品单价为 3.0 元/个，最低消费数量为 1 个。
+    .page-top-tip 朋友圈直发订单：产品单价为 {{form.unitPrice}} 元/个，最低消费数量为 1 个。
     el-form(label-width='120px' label-position='right' :model='form' :rules='rules' ref='form')
       el-form-item(label='平台：' prop='')
         el-select(placeholder='请选择' v-model='form.platform' @change='getParentCategoryList').w300
@@ -28,17 +28,18 @@
       template(v-if='form.direction === "2"')
         el-form-item(label='文案内容：' prop='')
           el-input(placeholder='请输入文案内容，多条文案请用 | 符号分隔' v-model='form.words' clearable type='textarea' rows='5').w600
+          .page-tip 已输入{{form.content.length}}条文案
         el-form-item(label='文案图片：' prop='')
           paste-upload(@success='handlePasteUploadSuccess' ref='cPasteUploader')
         el-form-item(label='文案图片：' prop='')
           el-upload(:action='action' name='files' :file-list='fileList' list-type='picture-card' :on-success='handleUploadSuccessForContent' :on-remove="handleRemoveForContent")
             <i class="el-icon-plus"></i>
             .upload-tip(slot='tip') 手动上传，只能上传gif/jpg/jpeg/png文件
-      el-form-item(label='链接：' prop='link')
+      el-form-item(label='链接：')
         el-input(placeholder='请输入链接' v-model='form.link' clearable).w300
       el-form-item(label='数量：' prop='count')
         el-input(placeholder='请输入数量' v-model='form.count' clearable).w300
-      el-form-item(label='备注：' prop='remark')
+      el-form-item(label='备注：')
         el-input(placeholder='请输入备注' type='textarea' v-model='form.remark' clearable).w600
       el-form-item(label='' prop='')
         el-checkbox(label='1' v-model='form.fixedRemark' true-label='1' false-label='0') 【记得互相点赞好评！优先点赞带图评论！】
@@ -191,7 +192,7 @@ export default {
   watch: {
     'form.words'(val) {
       if(val !== '') {
-        this.form.content = val.split('|')
+        this.form.content = val.split('\n')
       } else {
         this.form.content = []
       }

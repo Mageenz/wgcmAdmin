@@ -14,7 +14,7 @@
       tr
         th 链接：
         td
-          a(:href='taskInfo.tlink') {{taskInfo.tlink}}
+          a(:href='taskInfo.tlink' target='_blank') {{taskInfo.tlink}}
         th 数量：
         td
           span.mr15 {{taskInfo.trequiredquan}}/{{taskInfo.tleftquan}}
@@ -55,12 +55,13 @@
       el-button(type='primary' @click='submit' v-if='isOnline') 完成任务
       el-button(@click='$router.go(-1)') 返回
     el-dialog(width='30%' :visible.sync='isDialogShow' title='增加数量')
-      el-form(label-width='100px' label-position='right')
+      el-form(label-width='100px' label-position='right' ref='dForm' :model='dForm')
         el-form-item 目前数量为{{taskInfo.trequiredquan}}，单价为{{taskInfo.tunitprice}}元
-        el-form-item(label='数量：' prop='')
+        el-form-item(label='数量：' prop='addQuantity' :rules='{required: true, message: "请输入数量"}' )
           el-input(placeholder='请输入数量' v-model='dForm.addQuantity' clearable)
       .d-foot(slot='footer')
         el-button(type='primary' @click='addQ') 提交 
+        el-button(@click='isDialogShow = false') 取消
 </template>
 
 <script>
@@ -113,7 +114,7 @@ export default {
   },
   methods: {
     async check() {
-      if(isReleaseTaskCheck) {
+      if(this.isReleaseTaskCheck) {
         const res = await API.mission.checkReleaseTask(this.releaseTaskForm)
 
         if(res.data.code === 100) {
@@ -136,6 +137,10 @@ export default {
       }
     },
     async addQ() {
+      const valid = await this.$refs.dForm.validate()
+      if(!valid) {
+        return
+      }
       const res = await API.mission.addQuantity({
         taskId: this.taskInfo.tid,
         requiredQuantity: this.taskInfo.trequiredquan,
