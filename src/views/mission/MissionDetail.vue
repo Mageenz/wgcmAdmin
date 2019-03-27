@@ -23,33 +23,33 @@
         th 金额：
         td {{taskInfo.tamount}}
         th 状态：
-        td {{taskInfo.tstatus}}
+        td {{missionStatus[taskInfo.tstatus]}}
       tr
         th 方向：
         td(colspan='3') {{taskInfo.tdirection}}
-    el-form(label-width='120px' label-position='right' v-if='isReleaseTaskCheck')
-      el-form-item(label='接单次数上限：' prop='')
+    el-form(label-width='120px' label-position='right' v-if='isReleaseTaskCheck' ref='releaseTaskForm' :model='releaseTaskForm')
+      el-form-item(label='接单次数上限：' prop='receiveLimit' :rules='{required: true, message: "请输入接单次数上限："}')
         el-input(placeholder='请输入' v-model='releaseTaskForm.receiveLimit' clearable).w300
       el-form-item(label='兼职是否可见：' prop='')
         el-radio-group(v-model='releaseTaskForm.visible')
           el-radio(label='0') 不可见
           el-radio(label='1') 可见
       el-form-item(label='超时时间：' prop='')
-        el-select(placeholder='请选择' v-model='releaseTaskForm.timeout' clearable)
+        el-select(placeholder='请选择' v-model='releaseTaskForm.timeout')
           el-option(:value='key' :label='item' :key='key' v-for='(item, key) in timeout')
       el-form-item(label='是否通过：' prop='')
         el-radio-group(v-model='releaseTaskForm.taskStatus')
           el-radio(label='1') 通过
           el-radio(label='4') 不通过
-      el-form-item(label='不通过原因：' prop='' v-if='isReleaseTaskCheck && releaseTaskForm.taskStatus === "4"')
+      el-form-item(label='不通过原因：' prop='cause' v-if='isReleaseTaskCheck && releaseTaskForm.taskStatus === "4"' :rules='{required: true, message: "请输入原因"}')
         el-input(placeholder='请输入不通过原因' v-model='form.cause' clearable type='textarea').w600
-    el-form(label-width='120px' label-position='right' v-if='isReceiveTaskCheck')
+    el-form(label-width='120px' label-position='right' v-if='isReceiveTaskCheck' ref='receiveTaskForm' :model='receiveTaskForm')
       el-form-item(label='是否通过：' prop='')
         el-radio-group(v-model='receiveTaskForm.taskStatus')
-          el-radio(label='1') 通过
-          el-radio(label='4') 不通过
-      el-form-item(label='不通过原因：' prop='' v-if='isReceiveTaskCheck && receiveTaskForm.taskStatus === "4"')
-        el-input(placeholder='请输入不通过原因' v-model='form.cause' clearable type='textarea').w600
+          el-radio(label='2') 已完成
+          el-radio(label='3') 未达标
+      el-form-item(label='不通过原因：' prop='cause' v-if='isReceiveTaskCheck && receiveTaskForm.taskStatus === "3"' :rules='{required: true, message: "请输入原因"}')
+        el-input(placeholder='请输入不通过原因' v-model='receiveTaskForm.cause' clearable type='textarea').w600
     .page-foot
       el-button(type='primary' @click='check' v-if='isReleaseTaskCheck || isReceiveTaskCheck') 提交
       el-button(type='primary' @click='submit' v-if='isOnline') 完成任务
@@ -65,9 +65,12 @@
 </template>
 
 <script>
+import {missionStatus} from '@/enums'
+
 export default {
   data() {
     return {
+      missionStatus,
       form: {},
       releaseTaskForm: {
         taskId: '',
@@ -115,14 +118,29 @@ export default {
   methods: {
     async check() {
       if(this.isReleaseTaskCheck) {
+        const valid = await this.$refs.releaseTaskForm.validate()
+        if(!valid) {
+          return
+        }
         const res = await API.mission.checkReleaseTask(this.releaseTaskForm)
 
         if(res.data.code === 100) {
           this.$message.success('操作成功')
           this.$router.go(-1)
         }
-      } else if(isReceiveTaskCheck) {
+      } else if(this.isReceiveTaskCheck) {
+        const valid = await this.$refs.receiveTaskForm.validate()
 
+        if(!valid) {
+          return
+        }
+
+        const res = await API.mission.updateReceiveStatus(this.receiveTaskForm)
+
+        if(res.data.code === 100) {
+          this.$message.success('操作成功')
+          this.$router.go(-1)
+        }
       }
     },
     async submit() {
@@ -161,6 +179,7 @@ export default {
       this.form = {taskId, taskType, taskAddUserType}
       this.releaseTaskForm.taskId = this.receiveTaskForm.taskId = taskId
       this.releaseTaskForm.releaseTaskId = releaseTaskId
+      this.receiveTaskForm.releaseTaskId = releaseTaskId
       const res = await API.mission.taskDetail(this.form)
       
       if(res.data.code === 100) {

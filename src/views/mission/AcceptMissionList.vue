@@ -10,12 +10,31 @@
         el-button(type='primary' icon='el-icon-search' @click='search') 搜索
     el-table(:data='list' border stripe).page-table
       el-table-column(type='index')
-      el-table-column(label='任务编号')
+      el-table-column(label='接单编号' prop='tid')
+      el-table-column(label='发布编号' prop='ttid')
+      el-table-column(label='兼职编号' prop='trid')
+      el-table-column(label='用户名' prop='userName')
+      el-table-column(label='反馈截图' prop='')
         template(slot-scope='{row}')
-          router-link(:to='{name: "missionCheck", query: {operateType: "receiveTaskCheck", taskType: "ReceiveTask", taskId: row.tid, taskAddUserType: row.taddUserType}}') {{row.tid}}
-      el-table-column(label='姓名' prop='userName')
-      el-table-column(label='接单时间' prop='tdate' :formatter='timeFormater')
+          a(v-for='item in row.screenShotList' :href='item' target='_blank')
+            img(:src='item' height='50')
+      el-table-column(label='原因' prop='trefuseCause')
+      el-table-column(label='时间' prop='tdate' :formatter='timeFormater')
+      el-table-column(label='任务状态' prop='')
+        template(slot-scope='{row}') {{missionStatus1[row.tstatus]}}
+      el-table-column(label='操作' prop='')
+        template(slot-scope='{row}')
+          el-button(type='text' @click='updateReceiveStatus(row, 2)' v-if='row.tstatus === 1 || row.tstatus === 4') 通过
+          el-button(type='text' @click='updateReceiveStatus(row, 3)' v-if='row.tstatus === 1 || row.tstatus === 4') 不通过
+          el-button(type='text' @click='updateReceiveStatus(row, 4)' v-if='row.tstatus === 1') 驳回
     el-pagination.page-pagination(background :total='pagination.totalCount' :page-size='pagination.pageSize' :current-page='form.page' @current-change='handlePageChange' layout='prev, pager, next, total, jumper')
+    el-dialog(:visible.sync='isDialogShow' title='审核任务' width='30%')
+      el-form(label-width='60px' label-position='right')
+        el-form-item(label='原因：' prop='')
+          el-input(placeholder='请输入原因' type='textarea' rows='6' v-model='dForm.cause' clearable).w300
+      .p-foot(slot='footer')
+        el-button(type='primary' @click='doUpdateReceiveStatus') 提交
+        el-button(@click='isDialogShow = false') 取消
 </template>
 
 <script>
@@ -27,6 +46,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      ENV,
       missionStatus1,
       form: {
         releaseTaskId: '',
@@ -38,10 +58,38 @@ export default {
         totalCount: 1,
         pageSize: 10
       },
-      list: []
+      list: [],
+      isDialogShow: false,
+      dForm: {
+        cause: '',
+        taskId: '',
+        taskStatus: ''
+      }
     }
   },
   methods: {
+    updateReceiveStatus(row, taskStatus) {
+      if(taskStatus === 2) {
+        this.doUpdateReceiveStatus(row, taskStatus)
+      } else {
+        this.isDialogShow = true
+        this.dForm.cause = ''
+        this.dForm.taskId = row.tid
+        this.dForm.taskStatus = taskStatus
+      }
+    },
+    async doUpdateReceiveStatus() {
+      const res= await API.mission.updateReceiveStatus({
+        ...this.dForm,
+        releaseTaskId: this.$route.query.releaseTaskId
+      })
+
+      if(res.data.code === 100) {
+        this.$message.success('操作成功')
+        this.isDialogShow = false
+        this.getList()
+      }
+    },
     timeFormater(r, c, v, i) {
       return formatTime(v)
     },
@@ -58,7 +106,8 @@ export default {
       const res = await API.mission.receiveTaskView(params)
 
       if(res.data.code === 100) {
-        this.list = res.data.data.list
+        this.list = res.data.data.receiveTask.list
+        this.pagination.totalCount = res.data.data.receiveTask.total
       }
     },
     search() {

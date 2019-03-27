@@ -5,6 +5,10 @@
         el-select(placeholder='请选择' v-model='form.taskType').w100
           el-option(:value='item.value' :label='item.name' v-for='item in items')
       el-col(:span='6')
+        el-select(placeholder='请选择' v-model='form.userType' clearable).w100
+          el-option(value='0' label='后台')
+          el-option(value='1' label='客户')
+      el-col(:span='6')
         el-input(placeholder='请输入' v-model='form.taskId' clearable).w100
       el-col(:span='6' style='text-align:left')
         el-button(type='primary' icon='el-icon-search' @click='search') 搜索
@@ -14,6 +18,9 @@
         template(slot-scope='{row}')
           router-link(:to='{name: "missionCheck", query: {operateType: "releaseTaskCheck", taskType: taskType, taskId: row.tid, taskAddUserType: row.taddUserType}}') {{row.tid}}
       el-table-column(label='平台' prop='platformName')
+      el-table-column(label='用户名' prop='userName')
+      el-table-column(label='时间' prop='tdate')
+        template(slot-scope='{row}') {{row.tdate | formatTime}}
       el-table-column(label='方向' prop='tdirection')
       el-table-column(label='数量')
         template(slot-scope='{row}') {{row.trequiredquan}}/{{row.tleftquan}}
@@ -37,6 +44,7 @@ export default {
     return {
       form: {
         taskType: 'ReleaseTask',
+        userType: '0',
         taskId: '',
         page: 1
       },
@@ -58,9 +66,10 @@ export default {
   },
   methods: {
     async getList() {
-      const {taskType, taskId, page} = this.$route.query
+      const {taskType, taskId, userType, page} = this.$route.query
       
       this.form.taskType = taskType || 'ReleaseTask'
+      this.form.userType = userType || '0'
       this.form.taskId = taskId || ''
       this.form.page = +page || 1
       

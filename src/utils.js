@@ -1,12 +1,12 @@
-export function formatTime(v){
-  if(!v) {
-    return ''
-  }
-  const date = new Date(v)
+function formatNum(m){
+  return m < 10 ? '0' + m : m
+}
 
+export function formatTime(v){
   try {
-    return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    const date = new Date(v)
+    return `${date.getFullYear()}-${formatNum(date.getMonth()+1)}-${formatNum(date.getDate())} ${formatNum(date.getHours())}:${formatNum(date.getMinutes())}`
   } catch(e) {
-    return `转译失败${e}`
+    return ''
   }
 }

@@ -27,7 +27,7 @@
             .upload-tip(slot='tip') 只能上传gif/jpg/jpeg/png文件
       template(v-if='form.direction === "2"')
         el-form-item(label='文案内容：' prop='')
-          el-input(placeholder='请输入文案内容，多条文案请用 | 符号分隔' v-model='form.words' clearable type='textarea' rows='5').w600
+          el-input(placeholder='请输入文案内容，多条文案请用 回车换行' v-model='form.words' clearable type='textarea' rows='6').w600
           .page-tip 已输入{{form.content.length}}条文案
         el-form-item(label='文案图片：' prop='')
           paste-upload(@success='handlePasteUploadSuccess' ref='cPasteUploader')
@@ -35,9 +35,9 @@
           el-upload(:action='action' name='files' :file-list='fileList' list-type='picture-card' :on-success='handleUploadSuccessForContent' :on-remove="handleRemoveForContent")
             <i class="el-icon-plus"></i>
             .upload-tip(slot='tip') 手动上传，只能上传gif/jpg/jpeg/png文件
-      el-form-item(label='链接：')
-        el-input(placeholder='请输入链接' v-model='form.link' clearable).w300
-      el-form-item(label='数量：' prop='count')
+      el-form-item(label='链接和数量：')
+        el-input(placeholder='请输入链接和数量，用|分隔，如http://www.xxx.com|100，多条数据用 回车换行' rows='6' type='textarea' v-model='form.BatchList1' clearable).w600
+      //- el-form-item(label='数量：' prop='count')
         el-input(placeholder='请输入数量' v-model='form.count' clearable).w300
       el-form-item(label='备注：')
         el-input(placeholder='请输入备注' type='textarea' v-model='form.remark' clearable).w600
@@ -68,7 +68,9 @@ export default {
         fixedRemark: '0',
         contentMedia: [],
         content: [],
-        directionMedia: []
+        directionMedia: [],
+        BatchList1: '',
+        BatchList: [],
       },
       rules: {
         link: [
@@ -112,10 +114,10 @@ export default {
             const pasteFileList = this.$refs.cPasteUploader.getFileList()
             data.contentMedia = data.contentMedia.concat(pasteFileList)
 
-            if(data.content.length !== data.contentMedia.length) {
-              this.$message.warning('文案数量必须与图片数量相等')
-              return
-            }
+            // if(data.content.length !== data.contentMedia.length) {
+            //   this.$message.warning('文案数量必须与图片数量相等')
+            //   return
+            // }
           }
 
           this.isSubmitting = true
@@ -123,6 +125,7 @@ export default {
           data.contentMedia = JSON.stringify(data.contentMedia)
           data.content = JSON.stringify(data.content)
           data.directionMedia = JSON.stringify(data.directionMedia)
+          data.BatchList = JSON.stringify(data.BatchList)
           
           if(data.direction === '1') {
             data.direction = data.direction1
@@ -132,6 +135,7 @@ export default {
 
           delete data.words
           delete data.direction1
+          delete data.BatchList1
 
           const res = await API.mission.doPublish(data)
 
@@ -190,6 +194,13 @@ export default {
     }
   },
   watch: {
+    'form.BatchList1'(val) {
+      if(val !== '') {
+        this.form.BatchList = val.split('\n')
+      } else {
+        this.form.BatchList = []
+      }
+    },
     'form.words'(val) {
       if(val !== '') {
         this.form.content = val.split('\n')
