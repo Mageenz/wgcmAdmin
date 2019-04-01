@@ -11,6 +11,12 @@ export default {
 
 
 <style lang="less">
+.flex {
+  display: flex;
+  .flex-1 {
+    flex: 1;
+  }
+}
 .page-container {
   font-size: 12px;
   .page-operatebar {
@@ -77,6 +83,9 @@ export default {
 }
 .mb30 {
   margin-bottom: 30px !important;
+}
+.mr20 {
+  margin-right: 20px;
 }
 body {
   background-color: #eee;
