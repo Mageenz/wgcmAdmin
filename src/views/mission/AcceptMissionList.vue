@@ -98,7 +98,7 @@ export default {
 
           if(res.data.code === 100) {
             this.$message.success('操作成功')
-
+            this.getList()
           }
         }
       })
